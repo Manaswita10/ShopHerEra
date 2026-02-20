@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — ShopHerera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --cream: #FAF7F2;
+  --warm-white: #FDFAF6;
+  --blush: #E8C4B8;
+  --dusty-rose: #C9897A;
+  --terracotta: #B5624F;
+  --mocha: #6B4C44;
+  --sand: #D4B896;
+  --sage: #A3AFA0;
+  --dark: #2C1F1A;
+  --gold: #C9A96E;
+  --light-gold: #E8D5B0;
+  --success: #7A9E7E;
+  --error: #C9897A;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+/* NAV */
+nav {
+  background: var(--warm-white);
+  border-bottom: 1px solid var(--light-gold);
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--dark);
+  text-decoration: none;
+}
+.nav-logo em { color: var(--dusty-rose); font-style: italic; }
+.nav-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--mocha);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--dusty-rose); }
+
+/* PROGRESS BAR */
+.progress-bar {
+  background: var(--warm-white);
+  border-bottom: 1px solid var(--light-gold);
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.progress-step.active { color: var(--dark); }
+.progress-step.done { color: var(--dusty-rose); }
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.progress-step.done .step-num {
+  background: var(--dusty-rose);
+  border-color: var(--dusty-rose);
+  color: white;
+}
+.progress-step.active .step-num {
+  background: var(--dark);
+  border-color: var(--dark);
+  color: white;
+}
+.progress-line {
+  width: 60px;
+  height: 1px;
+  background: var(--light-gold);
+  margin: 0 12px;
+}
+
+/* MAIN LAYOUT */
+.checkout-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 40px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* LEFT COLUMN */
+.checkout-left { display: flex; flex-direction: column; gap: 28px; }
+
+/* SECTION CARDS */
+.checkout-card {
+  background: white;
+  border-radius: 4px;
+  padding: 28px;
+  border: 1px solid var(--light-gold);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--cream);
+}
+.card-num {
+  width: 32px;
+  height: 32px;
+  background: var(--dark);
+  color: var(--cream);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+/* FORM ELEMENTS */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-row.full { grid-template-columns: 1fr; }
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-group label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  color: var(--mocha);
+  text-transform: uppercase;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  border: 1px solid var(--light-gold);
+  background: var(--warm-white);
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--dark);
+  border-radius: 2px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--dusty-rose);
+  box-shadow: 0 0 0 3px rgba(201,137,122,0.1);
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--sage); }
+.form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B4C44' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+/* COUPON SECTION */
+.coupon-wrap {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--light-gold);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.coupon-wrap input {
+  flex: 1;
+  border: none;
+  padding: 13px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  background: var(--warm-white);
+  outline: none;
+  color: var(--dark);
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.coupon-wrap input::placeholder { letter-spacing: 0.5px; font-weight: 400; text-transform: none; color: var(--sage); }
+.coupon-btn {
+  background: var(--dark);
+  color: var(--cream);
+  border: none;
+  padding: 13px 24px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.coupon-btn:hover { background: var(--dusty-rose); }
+.coupon-msg {
+  font-size: 12px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 2px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.coupon-msg.success {
+  display: flex;
+  background: rgba(122,158,126,0.1);
+  color: var(--success);
+  border: 1px solid rgba(122,158,126,0.3);
+}
+.coupon-msg.error {
+  display: flex;
+  background: rgba(201,137,122,0.1);
+  color: var(--terracotta);
+  border: 1px solid rgba(201,137,122,0.3);
+}
+
+/* PAYMENT - COD */
+.payment-option {
+  border: 2px solid var(--dusty-rose);
+  border-radius: 4px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: rgba(201,137,122,0.04);
+  cursor: pointer;
+}
+.payment-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--dusty-rose);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.payment-radio::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--dusty-rose);
+}
+.payment-info h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+.payment-info p {
+  font-size: 13px;
+  color: var(--mocha);
+  line-height: 1.6;
+}
+.cod-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.cod-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--dark);
+  color: var(--gold);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* RIGHT COLUMN - ORDER SUMMARY */
+.checkout-right {
+  position: sticky;
+  top: 100px;
+}
+.order-summary {
+  background: white;
+  border: 1px solid var(--light-gold);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.summary-header {
+  background: var(--dark);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.summary-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: white;
+}
+.summary-header span {
+  font-size: 12px;
+  color: var(--sand);
+  letter-spacing: 1px;
+}
+.summary-items {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--cream);
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.summary-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.summary-item-img {
+  width: 56px;
+  height: 56px;
+  background: var(--cream);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  border: 1px solid var(--light-gold);
+  position: relative;
+}
+.item-qty-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--dusty-rose);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.summary-item-info { flex: 1; }
+.summary-item-info h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  color: var(--dark);
+  margin-bottom: 2px;
+}
+.summary-item-info span {
+  font-size: 12px;
+  color: var(--sage);
+}
+.summary-item-price {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--dark);
+}
+.empty-cart-msg {
+  text-align: center;
+  padding: 30px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--sage);
+}
+
+/* SUMMARY CALCULATIONS */
+.summary-calcs {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--cream);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--mocha);
+}
+.calc-row.discount { color: var(--success); }
+.calc-row.total {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--dark);
+  padding-top: 12px;
+  border-top: 1px solid var(--light-gold);
+  font-family: 'Playfair Display', serif;
+}
+.summary-footer { padding: 20px 24px; }
+
+/* PLACE ORDER BTN */
+.place-order-btn {
+  width: 100%;
+  background: var(--dark);
+  color: var(--cream);
+  border: none;
+  padding: 18px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.place-order-btn:hover {
+  background: var(--dusty-rose);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(201,137,122,0.35);
+}
+.place-order-btn:active { transform: translateY(0); }
+
+.secure-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 14px;
+}
+.secure-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--sage);
+  letter-spacing: 0.5px;
+}
+
+/* BIRTHDAY NOTE */
+.birthday-note {
+  background: linear-gradient(135deg, var(--dark), var(--mocha));
+  border-radius: 4px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+.birthday-note p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--sand);
+  line-height: 1.6;
+}
+.birthday-note strong { color: var(--gold); }
+
+/* SUCCESS OVERLAY */
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44,31,26,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.success-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+.success-card {
+  background: white;
+  border-radius: 4px;
+  padding: 60px 48px;
+  text-align: center;
+  max-width: 480px;
+  width: 90%;
+  transform: translateY(30px);
+  transition: transform 0.4s;
+}
+.success-overlay.show .success-card { transform: translateY(0); }
+.success-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+  display: block;
+  animation: pop 0.5s cubic-bezier(0.4,0,0.2,1) 0.3s both;
+}
+@keyframes pop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.success-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+.success-card h2 em { color: var(--dusty-rose); font-style: italic; }
+.success-card p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--mocha);
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+.order-id {
+  background: var(--cream);
+  border: 1px solid var(--light-gold);
+  padding: 10px 20px;
+  border-radius: 2px;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--dark);
+  font-weight: 700;
+  margin: 16px auto;
+  display: inline-block;
+}
+.success-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--light-gold);
+  margin: 20px auto;
+}
+.success-back-btn {
+  background: var(--dark);
+  color: var(--cream);
+  border: none;
+  padding: 14px 36px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  border-radius: 2px;
+  text-transform: uppercase;
+  transition: background 0.2s;
+  margin-top: 8px;
+}
+.success-back-btn:hover { background: var(--dusty-rose); }
+
+/* CONFETTI */
+.confetti-piece {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  top: -10px;
+  animation: confetti-fall linear forwards;
+  z-index: 301;
+  border-radius: 2px;
+}
+@keyframes confetti-fall {
+  to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--dark);
+  color: var(--cream);
+  padding: 14px 28px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 400;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .checkout-wrapper {
+    grid-template-columns: 1fr;
+    padding: 28px 20px;
+    gap: 28px;
+  }
+  .checkout-right { position: static; }
+  nav { padding: 16px 20px; }
+  .progress-bar { padding: 14px 20px; gap: 0; }
+  .progress-line { width: 30px; margin: 0 6px; }
+  .progress-step span { display: none; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .checkout-card { padding: 20px 16px; }
+  .summary-header, .summary-items, .summary-calcs, .summary-footer { padding-left: 16px; padding-right: 16px; }
+}
+
+/* FADE IN */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.6s ease forwards;
+}
+@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+.fade-in:nth-child(1) { animation-delay: 0.1s; }
+.fade-in:nth-child(2) { animation-delay: 0.2s; }
+.fade-in:nth-child(3) { animation-delay: 0.3s; }
+.fade-in:nth-child(4) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">shop<em>herera</em></a>
+  <a href="index.html" class="nav-back">← Back to Shop</a>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-bar">
+  <div class="progress-step done">
+    <div class="step-num">✓</div>
+    <span>Cart</span>
+  </div>
+  <div class="progress-line"></div>
+  <div class="progress-step active">
+    <div class="step-num">2</div>
+    <span>Checkout</span>
+  </div>
+  <div class="progress-line"></div>
+  <div class="progress-step">
+    <div class="step-num">3</div>
+    <span>Confirmed</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="checkout-wrapper">
+
+  <!-- LEFT -->
+  <div class="checkout-left">
+
+    <!-- CONTACT -->
+    <div class="checkout-card fade-in">
+      <div class="card-header">
+        <div class="card-num">1</div>
+        <h2 class="card-title">Contact Information</h2>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="firstName" placeholder="Abhishikta" required>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lastName" placeholder="Herera" required>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="you@email.com" required>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" required>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHIPPING -->
+    <div class="checkout-card fade-in">
+      <div class="card-header">
+        <div class="card-num">2</div>
+        <h2 class="card-title">Shipping Address</h2>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Address Line 1</label>
+          <input type="text" id="addr1" placeholder="House / Flat no., Street name" required>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Address Line 2 <span style="font-weight:400;opacity:0.6">(Optional)</span></label>
+          <input type="text" id="addr2" placeholder="Landmark, Area">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="city" placeholder="Your city" required>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <select id="state" required>
+            <option value="" disabled selected>Select state</option>
+            <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+            <option>Chhattisgarh</option><option>Delhi</option><option>Goa</option>
+            <option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option>
+            <option>Jharkhand</option><option>Karnataka</option><option>Kerala</option>
+            <option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option>
+            <option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option>
+            <option>Odisha</option><option>Punjab</option><option>Rajasthan</option>
+            <option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option>
+            <option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option>
+            <option>West Bengal</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>PIN Code</label>
+          <input type="text" id="pin" placeholder="6-digit PIN" maxlength="6" required>
+        </div>
+        <div class="form-group">
+          <label>Country</label>
+          <input type="text" value="India 🇮🇳" readonly style="background: var(--cream); color: var(--mocha); cursor: not-allowed;">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>Delivery Note <span style="font-weight:400;opacity:0.6">(Optional)</span></label>
+          <textarea id="note" placeholder="Any special instructions for delivery..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- COUPON -->
+    <div class="checkout-card fade-in">
+      <div class="card-header">
+        <div class="card-num">3</div>
+        <h2 class="card-title">Apply Coupon Code</h2>
+      </div>
+      <div class="coupon-wrap">
+        <input type="text" id="couponInput" placeholder="Enter your promo code" maxlength="20">
+        <button class="coupon-btn" onclick="applyCoupon()">APPLY</button>
+      </div>
+      <div class="coupon-msg" id="couponMsg"></div>
+      <p style="font-size:12px; color:var(--sage); margin-top:12px;">🎂 Birthday offer: Use <strong style="color:var(--dusty-rose); letter-spacing:1px;">MARCH15</strong> for flat ₹150 off!</p>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="checkout-card fade-in">
+      <div class="card-header">
+        <div class="card-num">4</div>
+        <h2 class="card-title">Payment Method</h2>
+      </div>
+      <div class="payment-option">
+        <div class="payment-radio"></div>
+        <div class="payment-info">
+          <h4>Cash on Delivery</h4>
+          <p>Pay in cash when your order arrives at your doorstep. No advance payment required.</p>
+          <div class="cod-badge">✦ 100% Safe & Secure</div>
+        </div>
+        <div class="cod-icon">💵</div>
+      </div>
+      <p style="font-size:12px; color:var(--sage); margin-top:14px; line-height:1.6;">📦 Expected delivery within <strong style="color:var(--dark);">5–7 business days</strong> after order confirmation. You'll receive a WhatsApp/SMS update.</p>
+    </div>
+
+  </div>
+
+  <!-- RIGHT - ORDER SUMMARY -->
+  <div class="checkout-right">
+    <div class="order-summary">
+      <div class="summary-header">
+        <h3>Order Summary</h3>
+        <span id="itemCountLabel">0 items</span>
+      </div>
+
+      <div class="summary-items" id="summaryItems">
+        <div class="empty-cart-msg">No items in cart.<br>Go back and add some! 🛍</div>
+      </div>
+
+      <div class="summary-calcs">
+        <div class="calc-row">
+          <span>Subtotal</span>
+          <span id="subtotalVal">₹0</span>
+        </div>
+        <div class="calc-row">
+          <span>Shipping</span>
+          <span id="shippingVal" style="color:var(--success);">FREE</span>
+        </div>
+        <div class="calc-row discount" id="discountRow" style="display:none;">
+          <span>Discount (MARCH15)</span>
+          <span id="discountVal">−₹150</span>
+        </div>
+        <div class="calc-row total">
+          <span>Total</span>
+          <span id="totalVal">₹0</span>
+        </div>
+      </div>
+
+      <div class="summary-footer">
+        <button class="place-order-btn" onclick="placeOrder()">
+          Place Order ✦
+        </button>
+        <div class="secure-badges">
+          <div class="secure-badge">🔒 Secure</div>
+          <div class="secure-badge">📦 COD</div>
+          <div class="secure-badge">✓ Trusted</div>
+        </div>
+        <div class="birthday-note">
+          <span style="font-size:24px;">🎂</span>
+          <p>Every order helps celebrate <strong>Abhishikta's</strong> special day. Thank you for being here! 🤍</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <span class="success-icon">🎉</span>
+    <h2>Order <em>Placed!</em></h2>
+    <p>Your order has been confirmed. We'll deliver it right to your doorstep!</p>
+    <div class="order-id" id="orderIdDisplay">ORDER #SH-000000</div>
+    <div class="success-divider"></div>
+    <p style="font-size:16px;">🎂 Thank you for celebrating Abhishikta's birthday with a purchase. She appreciates every single one of you!</p>
+    <br>
+    <button class="success-back-btn" onclick="goHome()">Back to ShopHerera</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// Load cart from localStorage passed via sessionStorage or URL
+let cart = [];
+let couponApplied = false;
+let discount = 0;
+
+// Try to get cart from sessionStorage (set by main page)
+try {
+  const stored = localStorage.getItem('shopherera_cart');
+  if (stored) cart = JSON.parse(stored);
+} catch(e) {}
+
+function renderSummary() {
+  const container = document.getElementById('summaryItems');
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  document.getElementById('itemCountLabel').textContent = count + (count === 1 ? ' item' : ' items');
+
+  if (cart.length === 0) {
+    container.innerHTML = '<div class="empty-cart-msg">No items in cart.<br>Go back and add some! 🛍</div>';
+    document.getElementById('subtotalVal').textContent = '₹0';
+    document.getElementById('totalVal').textContent = '₹0';
+    return;
+  }
+
+  container.innerHTML = cart.map(item => `
+    <div class="summary-item">
+      <div class="summary-item-img">
+        ${item.emoji}
+        <div class="item-qty-badge">${item.qty}</div>
+      </div>
+      <div class="summary-item-info">
+        <h4>${item.name}</h4>
+        <span>Qty: ${item.qty}</span>
+      </div>
+      <div class="summary-item-price">₹${item.price * item.qty}</div>
+    </div>
+  `).join('');
+
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const shipping = subtotal >= 1499 ? 0 : 99;
+  const total = subtotal + shipping - discount;
+
+  document.getElementById('subtotalVal').textContent = '₹' + subtotal;
+  document.getElementById('shippingVal').textContent = shipping === 0 ? 'FREE' : '₹' + shipping;
+  document.getElementById('shippingVal').style.color = shipping === 0 ? 'var(--success)' : 'var(--dark)';
+  document.getElementById('totalVal').textContent = '₹' + Math.max(0, total);
+}
+
+function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  const msg = document.getElementById('couponMsg');
+
+  if (code === 'MARCH15') {
+    if (couponApplied) {
+      msg.className = 'coupon-msg error';
+      msg.innerHTML = '✗ Coupon already applied!';
+      return;
+    }
+    couponApplied = true;
+    discount = 150;
+    msg.className = 'coupon-msg success';
+    msg.innerHTML = '✓ Coupon applied! ₹150 off your order 🎉';
+    document.getElementById('discountRow').style.display = 'flex';
+    renderSummary();
+    showToast('🎉 ₹150 discount applied!');
+  } else if (code === '') {
+    msg.className = 'coupon-msg error';
+    msg.innerHTML = '✗ Please enter a coupon code.';
+  } else {
+    msg.className = 'coupon-msg error';
+    msg.innerHTML = '✗ Invalid code. Try MARCH15 for ₹150 off!';
+  }
+}
+
+// Allow pressing Enter on coupon input
+document.getElementById('couponInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') applyCoupon();
+});
+
+function validateForm() {
+  const required = ['firstName', 'lastName', 'email', 'phone', 'addr1', 'city', 'state', 'pin'];
+  for (const id of required) {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.style.borderColor = 'var(--terracotta)';
+      el.focus();
+      showToast('⚠️ Please fill in all required fields');
+      setTimeout(() => el.style.borderColor = '', 2000);
+      return false;
+    } else {
+      el.style.borderColor = '';
+    }
+  }
+  // Email check
+  const email = document.getElementById('email').value;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('email').style.borderColor = 'var(--terracotta)';
+    showToast('⚠️ Please enter a valid email address');
+    return false;
+  }
+  // PIN check
+  const pin = document.getElementById('pin').value;
+  if (!/^\d{6}$/.test(pin)) {
+    document.getElementById('pin').style.borderColor = 'var(--terracotta)';
+    showToast('⚠️ PIN code must be 6 digits');
+    return false;
+  }
+  if (cart.length === 0) {
+    showToast('⚠️ Your cart is empty!');
+    return false;
+  }
+  return true;
+}
+
+function placeOrder() {
+  if (!validateForm()) return;
+
+  // Generate order ID
+  const orderId = 'SH-' + Math.random().toString(36).substr(2,6).toUpperCase();
+  document.getElementById('orderIdDisplay').textContent = 'ORDER #' + orderId;
+
+  // Show success overlay
+  document.getElementById('successOverlay').classList.add('show');
+
+  // Fire confetti
+  fireConfetti();
+
+  // Clear cart
+  localStorage.removeItem('shopherera_cart');
+}
+
+function fireConfetti() {
+  const colors = ['#C9897A', '#E8C4B8', '#C9A96E', '#D4B896', '#2C1F1A', '#A3AFA0'];
+  for (let i = 0; i < 80; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      el.style.animationDelay = Math.random() * 0.5 + 's';
+      el.style.width = (Math.random() * 8 + 4) + 'px';
+      el.style.height = (Math.random() * 8 + 4) + 'px';
+      el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }, i * 20);
+  }
+}
+
+function goHome() {
+  window.location.href = 'index.html';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Initial render
+renderSummary();
+</script>
+</body>
+</html>
